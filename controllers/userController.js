@@ -8,11 +8,18 @@ const bcrypt = require('bcrypt')
  */
 module.exports = {
 
+    test: (req,res)=>{
+        res.end("NOT LOGGED IN")
+    },
+
     /**
      * userController.profile()
      */
     profile: function(req,res) {
-
+        console.log("In profile function");
+        console.log("req.session.userId:", req.session.userId);
+        res.json({ message: "IT WORKS", session: req.session.userId })
+        
     },
 
     /**

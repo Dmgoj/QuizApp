@@ -1,10 +1,12 @@
 var express = require('express');
 var router = express.Router();
-var {profile,register,login,update,remove} = require('../controllers/userController.js');
-const auth = require('../middleware/auth')
+var {test,profile,register,login,update,remove} = require('../controllers/userController.js');
+const {auth} = require('../middleware/auth')
 
-
-
+/**
+ * get routes
+ */
+router.get('/login',test);
 
 
 /*
@@ -20,7 +22,9 @@ router.post('/login', login);
 /*
  * PUT, DELETE 
  */
-router.route('/:id',auth).get(profile).put(update).delete(remove)
+
+router.get('/', auth, profile);
+//router.route('/',auth).get(profile).put(update).delete(remove)
 
 
 
