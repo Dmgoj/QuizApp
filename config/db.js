@@ -1,5 +1,7 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const mongoose = require('mongoose');
-const url = 'mongodb+srv://domagojgrgic:domagoj123@domagojcluster.ddzydz0.mongodb.net/QuizApp?retryWrites=true&w=majority'
+const url = process.env.DB_URL;
 mongoose.set('strictQuery', true);
 const connectDB = mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 

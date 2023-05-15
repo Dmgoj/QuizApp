@@ -1,3 +1,7 @@
+/**
+ * Questions are from https://opentdb.com/api.php?amount=50
+ */
+
 var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 
@@ -11,3 +15,5 @@ var questionsSchema = new Schema({
 });
 
 module.exports = mongoose.model('questions', questionsSchema);
+
+
