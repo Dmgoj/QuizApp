@@ -14,59 +14,87 @@ module.exports = {
     /**
      * questionsController.show()
      */
-    show: async (req, res) =>{
-        try {
-        // Gets 10 random questions from db
-        const randomQuestion = await QuestionsModel.aggregate([ { $sample: { size: 10 } } ])
-        req.session.randomQuestion = randomQuestion
-        req.session.answeredQuestions = []
-        // Maps through those 10 questions and shuffle correct and incorrect answers
-        const questionsToSend = await randomQuestion.map((question) => ({ Question: question.question, Answers: _.shuffle(_.concat([question.correct_answer], question.incorrect_answers))  }))
-        req.session.question = questionsToSend
-        
-        req.session.startTime = (new Date().getTime())/1000 // First question start time
-        res.json(questionsToSend[0])
-        
-      
-        } catch (Error) {
-            res.status(500).json(Error.message)
-        }
-    },
-
-   
-    
-    answer: async(req,res)=>{
-        
-        //const randomQuestion = req.session.randomQuestion
-        //console.log("rand quest in answer: " ,randomQuestion)
-        const questionsToSend = req.session.question
-        const userAnswer = req.body.answer
-        let currentIndex = req.session.currentIndex || 0;
-        
-      
-        
-        
-        
-       try{
-        
-        if(userAnswer) {
-            const grade = userAnswer === questionsToSend[currentIndex].correct_answer ? 1 : 0
-            const answeringTime = (new Date().getTime() - req.session.startTime)/1000 // answering time in seconds
+        show: async (req, res) =>{
+            try {
+            // Gets 10 random questions from db
+            const randomQuestion = await QuestionsModel.aggregate([ { $sample: { size: 10 } } ])
+            req.session.randomQuestion = randomQuestion
+            req.session.answeredQuestions = []
+            // Maps through those 10 questions and shuffle correct and incorrect answers
+            const questionsToSend = await randomQuestion.map((question) => ({ 
+                Question: question.question, 
+                Answers: _.shuffle(_.concat([question.correct_answer], question.incorrect_answers)),
+                correct_answer: question.correct_answer  }))
+            req.session.question = questionsToSend
             
-            req.session.answeredQuestions.push({question: questionsToSend[currentIndex].Question, grade: grade, time: answeringTime, })
+            req.session.startTime = (new Date().getTime()) // First question start time
+            
+            req.session.currentIndex = 0
+            //console.log(req.session.answeredQuestions, req.session.currentIndex)
+            res.json(questionsToSend[0])
+            
+            
+            } catch (Error) {
+                res.status(500).json(Error.message)
+            }
+        },
 
-            // if (currentIndex < questionsToSend.length - 1) {
-            //     const nextQuestion = questionsToSend[currentIndex + 1];
-            //     res.json(nextQuestion);
-            //     console.log(nextQuestion)
-            // }
+    
+        
+        answer: async(req,res)=>{
+            
+            //const randomQuestion = req.session.randomQuestion
+            //console.log("rand quest in answer: " ,randomQuestion)
+            const questionsToSend = req.session.question
+            const userAnswer = req.body.answer
+            let currentIndex = req.session.currentIndex || 0
+            //;
+            console.log(currentIndex)
+            //console.log(typeof currentIndex, req.session.currentIndex);
+            
+        
+            
+            
+            
+        try{
+            
+            if(userAnswer) {
+                const grade = userAnswer === questionsToSend[currentIndex].correct_answer ? 1 : 0
+                const answeringTime = (new Date().getTime() - req.session.startTime)/1000 // answering time in seconds
+                
+                // test radi
+                console.log(questionsToSend[currentIndex].Question)
+                console.log(questionsToSend[currentIndex].correct_answer)
+                
+                req.session.answeredQuestions.push({question: questionsToSend[currentIndex].Question, grade: grade, time: answeringTime, })
 
-            let nextQuestion = questionsToSend[currentIndex];
-            req.session.currentIndex = currentIndex+1
-            req.session.startTime = new Date().getTime()
-            res.json(nextQuestion);
-            //res.json(req.session.answeredQuestions)
-            } 
+                
+                req.session.currentIndex = currentIndex+1
+                let nextQuestion = questionsToSend[req.session.currentIndex];
+                
+                req.session.startTime = new Date().getTime()
+                res.json(nextQuestion);
+                
+            
+                //res.json(req.session.answeredQuestions)
+                } 
+                const answeredQuestions = req.session.answeredQuestions
+                const finalScore = req.session.finalScore
+                
+            const calculateScore = (grade, time) => {
+                const n = 100 * grade;
+                const k = 0.2;
+                const e = 2.71828;
+                const score = n * Math.pow(e, -k * time);
+                return score;
+              }
+              for(const answer of answeredQuestions) {
+                req.session.scores = calculateScore(answer.grade,answer.time)
+
+              }
+              //console.log(req.session.scores)
+              
+        
         } catch (Error) {
             res.json(Error.message );
           }
