@@ -84,8 +84,10 @@ module.exports = {
         
             if (passwordMatch) {
               req.session.userId = user._id;
+              const sessionToken = req.sessionID;
               res.status(200).json({
-                name: user
+                token: sessionToken,
+                user
               });
             } else {
               res.status(401);
