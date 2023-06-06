@@ -36,7 +36,7 @@ function RegisterForm() {
             <label htmlFor="password">Password:</label>
             <input type="password" name="password" onChange={(e) => setForm({ ...form, password: e.target.value })} required></input>
             <button type="submit">Submit</button>
-            Already registered? <a href="#">Login</a>
+            Already registered? <a href="/">Login</a>
         </form>
     )
 }

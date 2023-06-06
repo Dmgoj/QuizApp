@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var {show,answer} = require('../controllers/questionsController.js');
+var {show,answer,final} = require('../controllers/questionsController.js');
 const {auth} = require('../middleware/auth')
 
 /*
@@ -16,7 +16,8 @@ const {auth} = require('../middleware/auth')
 //router.route('/').get(auth,show);
 
 // Ova isto radi
-router.get('/questions',auth, show)
+router.get('/questions',auth, show);
+router.get('/final',final);
 //     console.log('Show route works!');
 //   });
 /*

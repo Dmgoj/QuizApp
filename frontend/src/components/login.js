@@ -20,9 +20,11 @@ function LoginForm() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-      
+      const instance = axios.create({
+  withCredentials: true
+})
         try {
-          const response = await axios.post('http://localhost:5000/api/users/login', {
+          const response = await instance.post('http://localhost:5000/api/users/login', {
             name: form.name,
             password: form.password
           });
@@ -77,7 +79,7 @@ function LoginForm() {
             <label htmlFor="password">Password:</label>
             <input type="password" name="password" onChange={(e) => setForm({ ...form, password: e.target.value })} required></input>
             <button type="submit">Login</button>
-            Don't have an account? <a href="#">Register</a>
+            Don't have an account? <a href="/register">Register</a>
         </form>
     )
 }

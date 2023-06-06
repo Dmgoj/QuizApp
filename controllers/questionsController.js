@@ -50,10 +50,7 @@ module.exports = {
         if(userAnswer) {
             const grade = userAnswer === questionsToSend[currentIndex].correct_answer ? 1 : 0
             const answeringTime = (new Date().getTime() - req.session.startTime)/1000 // answering time in seconds
-            /**test radi
-             *    console.log(questionsToSend[currentIndex].Question)
-             *    console.log(questionsToSend[currentIndex].correct_answer)
-             *  */ 
+            
             req.session.answeredQuestions.push({question: questionsToSend[currentIndex].Question, grade: grade, time: answeringTime, })
             req.session.currentIndex = currentIndex+1
 
@@ -80,8 +77,27 @@ module.exports = {
             }
             finalScore = _.sum(scores)
             req.session.finalScore = finalScore
+            finalni = req.session.finalScore
+            
+           
+            
+              
     } catch (Error) {
         res.json(Error.message );
         }
     },
+
+    /**
+     * GET /api/quiz/final
+     * @returns final score
+     *  
+     */
+
+    final: async(req,res) => {
+       
+        try{res.json(finalni)}
+        catch(Error){
+            res.json(Error.message)
+        }
+    }
 }
