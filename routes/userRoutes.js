@@ -4,12 +4,14 @@ var {test,profile,register,login,update,remove} = require('../controllers/userCo
 const {auth} = require('../middleware/auth')
 
 /**
- * get routes
+ * GET
  */
 router.get('/login',test);
+router.get('/', auth, profile);
 
 
 /*
+ * POST
  * Register user
  */
 router.post('/register',register)
@@ -24,7 +26,7 @@ router.post('/login', login);
  */
 
 router.get('/', auth, profile);
-//router.route('/',auth).get(profile).put(update).delete(remove)
+
 
 
 

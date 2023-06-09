@@ -6,20 +6,9 @@ const {auth} = require('../middleware/auth')
 /*
  * GET
  */
-//router.get('/', questionsController.list);
-
-/*
- * GET
- */
-
-// Ova radi
-//router.route('/').get(auth,show);
-
-// Ova isto radi
 router.get('/questions',auth, show);
 router.get('/final',final);
-//     console.log('Show route works!');
-//   });
+
 /*
  * POST
  */

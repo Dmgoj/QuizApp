@@ -8,7 +8,6 @@ function RegisterForm() {
      )
     const  handleRegister = (event) => {
         event.preventDefault();
-
         // Create a data object with the username and password
         const data = {
             name: form.name,
@@ -23,9 +22,7 @@ function RegisterForm() {
                 // TODO: Perform actions after successful login
             })
             .catch(error => {
-
                 console.log('Request failed', error.message);
-
             });
     };
     
